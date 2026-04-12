@@ -3,62 +3,305 @@ import os
 
 PRESETS_FILE = 'presets.json'
 
-# Load presets from file
-def load_presets():
-    if os.path.exists(PRESETS_FILE):
-        with open(PRESETS_FILE, 'r') as f:
-            return json.load(f)
-    return {}
-
-# Save presets to file
-def save_presets(presets):
-    with open(PRESETS_FILE, 'w') as f:
-        json.dump(presets, f, indent=2)
-
-# Get default/base preset
-
-BASE_PRESET = {
-    "warmth_factor": 1.0,
-    "warm_r": 1.0,
-    "warm_g": 1.0,
-    "glow_strength": 0.0,
-    "glow_blur": 8,
+# Default parameter values — "zero state" means no edits applied
+DEFAULT_PARAMS = {
+    # Light
+    "exposure": 0.0,
     "brightness": 1.0,
     "contrast": 1.0,
+    "highlights": 0,
+    "shadows": 0,
+    "whites": 0,
+    "blacks": 0,
+    # Color
+    "temperature": 0,
+    "tint": 0,
+    "saturation": 1.0,
     "vibrance": 1.0,
-    "color": 1.0,
-    "grain_strength": 0,
-    "sharpness": 0.0,
-    "sun_traces": 0,
-    "grain_effect": False,
-    "sun_traces_effect": False
+    "hue": 0,
+    # Effects
+    "grain": 0,
+    "vignette": 0,
+    "glow": 0,
+    "fade": 0,
+    "clarity": 0,
+    "sharpen": 0.0,
+    "blur": 0.0,
+    "light_leak": 0,
+    "sun_flare": 0,
+    "noise_reduction": 0,
+    "posterize": 0,
+    "sepia": 0,
+    "motion_blur": 0,
 }
 
-CHATGPT_TEMPLATE = {
-    "warmth_factor": 1.08,
-    "warm_r": 1.08,
-    "warm_g": 0.97,
-    "glow_strength": 0.15,
-    "glow_blur": 8,
-    "brightness": 1.05,
-    "contrast": 1.12,
-    "vibrance": 1.10,
-    "color": 1.0,
-    "grain_strength": 0,
-    "sharpness": 1.3,
-    "sun_traces": 0,
-    "grain_effect": False,
-    "sun_traces_effect": False
+BUILTIN_PRESETS = {
+    "Golden Foliage": {
+        "params": {
+            **DEFAULT_PARAMS,
+            "exposure": 0.05,
+            "contrast": 1.1,
+            "highlights": -15,
+            "shadows": 5,
+            "blacks": -10,
+            "temperature": 30,
+            "tint": 5,
+            "saturation": 1.12,
+            "vibrance": 1.05,
+        },
+        "builtin": True,
+        "cover": "/preset-cover/Golden Hour Glow.jpg",
+    },
+    "Vintage Glow": {
+        "params": {
+            **DEFAULT_PARAMS,
+            "exposure": 0.2,
+            "brightness": 1.1,
+            "contrast": 0.85,
+            "highlights": -10,
+            "shadows": 20,
+            "whites": 10,
+            "blacks": 15,
+            "temperature": 25,
+            "tint": 5,
+            "saturation": 0.85,
+            "vibrance": 0.9,
+            "grain": 4,
+            "glow": 15,
+            "fade": 12,
+            "clarity": -10,
+        },
+        "builtin": True,
+        "cover": "/preset-cover/Golden Film Haze.jpg",
+    },
+    "Cool Street": {
+        "params": {
+            **DEFAULT_PARAMS,
+            "exposure": -0.1,
+            "brightness": 0.95,
+            "contrast": 1.05,
+            "highlights": -15,
+            "shadows": 5,
+            "whites": -10,
+            "blacks": -10,
+            "temperature": -20,
+            "tint": -10,
+            "saturation": 0.85,
+            "vibrance": 0.95,
+            "grain": 4,
+            "clarity": 10,
+            "sharpen": 0.3,
+        },
+        "builtin": True,
+        "cover": "/preset-cover/Cinematic Solitude.jpg",
+    },
+    "Noir Contrast": {
+        "params": {
+            **DEFAULT_PARAMS,
+            "exposure": -0.1,
+            "brightness": 0.95,
+            "contrast": 1.3,
+            "highlights": 10,
+            "shadows": -15,
+            "whites": 15,
+            "blacks": -25,
+            "saturation": 0.0,
+            "vibrance": 0.0,
+            "grain": 3,
+            "vignette": 5,
+            "clarity": 20,
+            "sharpen": 0.4,
+        },
+        "builtin": True,
+        "cover": "/preset-cover/Noir Film Portrait.jpg",
+    },
+    "Rainy Night": {
+        "params": {
+            **DEFAULT_PARAMS,
+            "exposure": -0.15,
+            "brightness": 0.92,
+            "contrast": 1.12,
+            "highlights": -10,
+            "shadows": 5,
+            "blacks": -15,
+            "temperature": 15,
+            "tint": -5,
+            "saturation": 0.9,
+            "vibrance": 0.95,
+            "vignette": 3,
+        },
+        "builtin": True,
+        "cover": "/preset-cover/Rainy Cinema.jpg",
+    },
+    "Soft Pastoral": {
+        "params": {
+            **DEFAULT_PARAMS,
+            "exposure": 0.15,
+            "brightness": 1.1,
+            "contrast": 0.9,
+            "highlights": -15,
+            "shadows": 15,
+            "whites": 5,
+            "temperature": 20,
+            "tint": 5,
+            "saturation": 1.05,
+            "vibrance": 1.1,
+            "glow": 5,
+            "clarity": -15,
+        },
+        "builtin": True,
+        "cover": "/preset-cover/Golden Petal Dream.jpg",
+    },
+    "Hazy Riverlight": {
+        "params": {
+            **DEFAULT_PARAMS,
+            "exposure": 0.2,
+            "brightness": 1.15,
+            "contrast": 0.8,
+            "highlights": -30,
+            "shadows": 20,
+            "whites": 15,
+            "blacks": 5,
+            "temperature": 40,
+            "tint": 10,
+            "vibrance": 0.9,
+            "glow": 10,
+            "fade": 5,
+            "clarity": -10,
+            "sun_flare": 10,
+        },
+        "builtin": True,
+        "cover": "/preset-cover/Golden Reverie.jpg",
+    },
+    "Warm Meadow": {
+        "params": {
+            **DEFAULT_PARAMS,
+            "contrast": 1.05,
+            "highlights": -10,
+            "shadows": 5,
+            "blacks": -5,
+            "temperature": 20,
+            "saturation": 1.1,
+            "vibrance": 1.05,
+        },
+        "builtin": True,
+        "cover": "/preset-cover/Golden Elven Haze.jpg",
+    },
+    "Noir Motion": {
+        "params": {
+            **DEFAULT_PARAMS,
+            "exposure": -0.2,
+            "brightness": 0.9,
+            "contrast": 1.25,
+            "highlights": 5,
+            "shadows": -20,
+            "whites": 10,
+            "blacks": -30,
+            "saturation": 0.0,
+            "vibrance": 0.0,
+            "grain": 5,
+            "vignette": 5,
+            "clarity": 15,
+        },
+        "builtin": True,
+        "cover": "/preset-cover/Noir Motion.jpg",
+    },
+    "Moody Daisies": {
+        "params": {
+            **DEFAULT_PARAMS,
+            "exposure": -0.2,
+            "brightness": 0.9,
+            "contrast": 1.05,
+            "highlights": -10,
+            "shadows": 5,
+            "whites": -10,
+            "blacks": -15,
+            "temperature": -15,
+            "tint": -10,
+            "saturation": 0.8,
+            "vibrance": 0.85,
+            "vignette": 3,
+            "clarity": 10,
+            "sharpen": 0.3,
+        },
+        "builtin": True,
+        "cover": "/preset-cover/Twilight Meadow.jpg",
+    },
+    "Soft Editorial": {
+        "params": {
+            **DEFAULT_PARAMS,
+            "exposure": 0.1,
+            "brightness": 1.05,
+            "contrast": 0.92,
+            "highlights": -5,
+            "shadows": 10,
+            "blacks": 5,
+            "temperature": 12,
+            "tint": -3,
+            "saturation": 0.95,
+            "vibrance": 1.0,
+            "glow": 5,
+            "fade": 5,
+            "clarity": -8,
+        },
+        "builtin": True,
+        "cover": "/preset-cover/Meadow Editorial.jpg",
+    },
+    "Golden Dusk": {
+        "params": {
+            **DEFAULT_PARAMS,
+            "exposure": -0.2,
+            "brightness": 0.9,
+            "contrast": 1.1,
+            "highlights": -10,
+            "shadows": 5,
+            "blacks": -15,
+            "temperature": 20,
+            "tint": -3,
+            "saturation": 0.88,
+            "vibrance": 0.95,
+            "vignette": 3,
+        },
+        "builtin": True,
+        "cover": "/preset-cover/Golden Dusk Cinema.jpg",
+    },
 }
 
-# On first run, save base preset if not present
-presets = load_presets()
-changed = False
-if "base" not in presets:
-    presets["base"] = BASE_PRESET
-    changed = True
-if "chatgpt_template" not in presets:
-    presets["chatgpt_template"] = CHATGPT_TEMPLATE
-    changed = True
-if changed:
-    save_presets(presets)
+
+DELETED_FILE = 'deleted_builtins.json'
+
+
+def _load_deleted_builtins():
+    if os.path.exists(DELETED_FILE):
+        with open(DELETED_FILE, 'r') as f:
+            try:
+                return json.load(f)
+            except json.JSONDecodeError:
+                return []
+    return []
+
+
+def _save_deleted_builtins(deleted):
+    with open(DELETED_FILE, 'w') as f:
+        json.dump(deleted, f)
+
+
+def load_presets():
+    """Load presets from file, merging with builtins (excluding deleted ones)."""
+    deleted = _load_deleted_builtins()
+    presets = {k: v for k, v in BUILTIN_PRESETS.items() if k not in deleted}
+    if os.path.exists(PRESETS_FILE):
+        with open(PRESETS_FILE, 'r') as f:
+            try:
+                user_presets = json.load(f)
+                presets.update(user_presets)
+            except json.JSONDecodeError:
+                pass
+    return presets
+
+
+def save_presets(presets):
+    """Save only user presets (not builtins) to file."""
+    user_presets = {k: v for k, v in presets.items() if not v.get('builtin', False)}
+    with open(PRESETS_FILE, 'w') as f:
+        json.dump(user_presets, f, indent=2)

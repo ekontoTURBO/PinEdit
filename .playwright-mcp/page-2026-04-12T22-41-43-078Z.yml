@@ -1,0 +1,227 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - img "Pinedit" [ref=e4]
+      - img "Pinedit" [ref=e5]
+    - generic [ref=e6]:
+      - button "Reset" [ref=e7] [cursor=pointer]:
+        - img [ref=e8]
+        - text: Reset
+      - button "Export" [disabled] [ref=e11]:
+        - img [ref=e12]
+        - text: Export
+  - main [ref=e15]:
+    - complementary [ref=e16]:
+      - heading "Presets" [level=3] [ref=e18]
+      - generic [ref=e19]:
+        - generic [ref=e20] [cursor=pointer]:
+          - generic [ref=e21]: ○
+          - generic [ref=e23]: None
+        - generic [ref=e24] [cursor=pointer]:
+          - generic [ref=e25]: C
+          - generic [ref=e26]:
+            - generic [ref=e27]: Clean Minimal
+            - generic [ref=e28]: Built-in
+        - generic [ref=e29] [cursor=pointer]:
+          - generic [ref=e30]: C
+          - generic [ref=e31]:
+            - generic [ref=e32]: Cottagecore
+            - generic [ref=e33]: Built-in
+        - generic [ref=e34] [cursor=pointer]:
+          - generic [ref=e35]: D
+          - generic [ref=e36]:
+            - generic [ref=e37]: Dark Academia
+            - generic [ref=e38]: Built-in
+        - generic [ref=e39] [cursor=pointer]:
+          - generic [ref=e40]: F
+          - generic [ref=e41]:
+            - generic [ref=e42]: Film Analog
+            - generic [ref=e43]: Built-in
+        - generic [ref=e44] [cursor=pointer]:
+          - generic [ref=e45]: G
+          - generic [ref=e46]:
+            - generic [ref=e47]: Golden Hour
+            - generic [ref=e48]: Built-in
+        - generic [ref=e49] [cursor=pointer]:
+          - generic [ref=e50]: M
+          - generic [ref=e51]:
+            - generic [ref=e52]: Moody
+            - generic [ref=e53]: Built-in
+        - generic [ref=e54] [cursor=pointer]:
+          - generic [ref=e55]: P
+          - generic [ref=e56]:
+            - generic [ref=e57]: Pastel Dream
+            - generic [ref=e58]: Built-in
+        - generic [ref=e59] [cursor=pointer]:
+          - generic [ref=e60]: S
+          - generic [ref=e61]:
+            - generic [ref=e62]: Soft Portrait
+            - generic [ref=e63]: Built-in
+        - generic [ref=e64] [cursor=pointer]:
+          - generic [ref=e65]: V
+          - generic [ref=e66]:
+            - generic [ref=e67]: Vibrant Pop
+            - generic [ref=e68]: Built-in
+        - generic [ref=e69] [cursor=pointer]:
+          - generic [ref=e70]: V
+          - generic [ref=e71]:
+            - generic [ref=e72]: Vintage Fade
+            - generic [ref=e73]: Built-in
+        - generic [ref=e74] [cursor=pointer]:
+          - img [ref=e76]
+          - generic [ref=e77]:
+            - generic [ref=e78]: ladne 1
+            - generic [ref=e79]: Custom
+        - generic [ref=e80] [cursor=pointer]:
+          - img [ref=e82]
+          - generic [ref=e83]:
+            - generic [ref=e84]: ladne 2
+            - generic [ref=e85]: Custom
+      - button "Save as Preset" [disabled] [ref=e87]:
+        - img [ref=e88]
+        - text: Save as Preset
+    - generic [ref=e92] [cursor=pointer]:
+      - img [ref=e93]
+      - paragraph [ref=e97]: Drop photos here
+      - paragraph [ref=e98]: or click to browse
+    - complementary [ref=e99]:
+      - heading "Adjustments" [level=3] [ref=e101]
+      - generic [ref=e102]:
+        - generic [ref=e103]:
+          - button "Light" [ref=e104] [cursor=pointer]:
+            - img [ref=e105]
+            - text: Light
+            - img [ref=e108]
+          - generic [ref=e110]:
+            - generic [ref=e111]:
+              - generic [ref=e112]: Exposure
+              - generic [ref=e113]:
+                - slider [ref=e114] [cursor=pointer]: "0"
+                - generic [ref=e115]: "0"
+            - generic [ref=e116]:
+              - generic [ref=e117]: Brightness
+              - generic [ref=e118]:
+                - slider [ref=e119] [cursor=pointer]: "1"
+                - generic [ref=e120]: "1.00"
+            - generic [ref=e121]:
+              - generic [ref=e122]: Contrast
+              - generic [ref=e123]:
+                - slider [ref=e124] [cursor=pointer]: "1"
+                - generic [ref=e125]: "1.00"
+            - generic [ref=e126]:
+              - generic [ref=e127]: Highlights
+              - generic [ref=e128]:
+                - slider [ref=e129] [cursor=pointer]: "0"
+                - generic [ref=e130]: "0"
+            - generic [ref=e131]:
+              - generic [ref=e132]: Shadows
+              - generic [ref=e133]:
+                - slider [ref=e134] [cursor=pointer]: "0"
+                - generic [ref=e135]: "0"
+            - generic [ref=e136]:
+              - generic [ref=e137]: Whites
+              - generic [ref=e138]:
+                - slider [ref=e139] [cursor=pointer]: "0"
+                - generic [ref=e140]: "0"
+            - generic [ref=e141]:
+              - generic [ref=e142]: Blacks
+              - generic [ref=e143]:
+                - slider [ref=e144] [cursor=pointer]: "0"
+                - generic [ref=e145]: "0"
+        - generic [ref=e146]:
+          - button "Color" [ref=e147] [cursor=pointer]:
+            - img [ref=e148]
+            - text: Color
+            - img [ref=e152]
+          - generic [ref=e154]:
+            - generic [ref=e155]:
+              - generic [ref=e156]: Temperature
+              - generic [ref=e157]:
+                - slider [ref=e158] [cursor=pointer]: "0"
+                - generic [ref=e159]: "0"
+            - generic [ref=e160]:
+              - generic [ref=e161]: Tint
+              - generic [ref=e162]:
+                - slider [ref=e163] [cursor=pointer]: "0"
+                - generic [ref=e164]: "0"
+            - generic [ref=e165]:
+              - generic [ref=e166]: Saturation
+              - generic [ref=e167]:
+                - slider [ref=e168] [cursor=pointer]: "1"
+                - generic [ref=e169]: "1.00"
+            - generic [ref=e170]:
+              - generic [ref=e171]: Vibrance
+              - generic [ref=e172]:
+                - slider [ref=e173] [cursor=pointer]: "1"
+                - generic [ref=e174]: "1.00"
+            - generic [ref=e175]:
+              - generic [ref=e176]: Hue
+              - generic [ref=e177]:
+                - slider [ref=e178] [cursor=pointer]: "0"
+                - generic [ref=e179]: "0"
+        - generic [ref=e180]:
+          - button "Effects" [ref=e181] [cursor=pointer]:
+            - img [ref=e182]
+            - text: Effects
+            - img [ref=e184]
+          - generic [ref=e186]:
+            - generic [ref=e187]:
+              - generic [ref=e188]: Film Grain
+              - generic [ref=e189]:
+                - slider [ref=e190] [cursor=pointer]: "0"
+                - generic [ref=e191]: "0"
+            - generic [ref=e192]:
+              - generic [ref=e193]: Vignette
+              - generic [ref=e194]:
+                - slider [ref=e195] [cursor=pointer]: "0"
+                - generic [ref=e196]: "0"
+            - generic [ref=e197]:
+              - generic [ref=e198]: Soft Glow
+              - generic [ref=e199]:
+                - slider [ref=e200] [cursor=pointer]: "0"
+                - generic [ref=e201]: "0"
+            - generic [ref=e202]:
+              - generic [ref=e203]: Fade
+              - generic [ref=e204]:
+                - slider [ref=e205] [cursor=pointer]: "0"
+                - generic [ref=e206]: "0"
+            - generic [ref=e207]:
+              - generic [ref=e208]: Clarity
+              - generic [ref=e209]:
+                - slider [ref=e210] [cursor=pointer]: "0"
+                - generic [ref=e211]: "0"
+            - generic [ref=e212]:
+              - generic [ref=e213]: Sharpen
+              - generic [ref=e214]:
+                - slider [ref=e215] [cursor=pointer]: "0"
+                - generic [ref=e216]: "0"
+            - generic [ref=e217]:
+              - generic [ref=e218]: Blur
+              - generic [ref=e219]:
+                - slider [ref=e220] [cursor=pointer]: "0"
+                - generic [ref=e221]: "0"
+            - generic [ref=e222]:
+              - generic [ref=e223]: Light Leak
+              - generic [ref=e224]:
+                - slider [ref=e225] [cursor=pointer]: "0"
+                - generic [ref=e226]: "0"
+            - generic [ref=e227]:
+              - generic [ref=e228]: Sun Flare
+              - generic [ref=e229]:
+                - slider [ref=e230] [cursor=pointer]: "0"
+                - generic [ref=e231]: "0"
+            - generic [ref=e232]:
+              - generic [ref=e233]: Denoise
+              - generic [ref=e234]:
+                - slider [ref=e235] [cursor=pointer]: "0"
+                - generic [ref=e236]: "0"
+            - generic [ref=e237]:
+              - generic [ref=e238]: Posterize
+              - generic [ref=e239]:
+                - slider [ref=e240] [cursor=pointer]: "0"
+                - generic [ref=e241]: "0"
+            - generic [ref=e242]:
+              - generic [ref=e243]: Sepia
+              - generic [ref=e244]:
+                - slider [ref=e245] [cursor=pointer]: "0"
+                - generic [ref=e246]: "0"

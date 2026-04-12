@@ -1,42 +1,31 @@
 {
-  "base": {
-    "warm_r": 1.1,
-    "warm_g": 1.05,
-    "glow_strength": 0.6,
-    "glow_blur": 10,
-    "brightness": 1.1,
-    "contrast": 1.05,
-    "color": 1.2,
-    "grain_strength": 15,
-    "grain_effect": true,
-    "sun_traces_effect": true
-  },
-  "dreamy look": {
-    "warm_r": 1.1,
-    "warm_g": 1.05,
-    "glow_strength": 0.6,
-    "glow_blur": 10,
-    "brightness": 1.1,
-    "contrast": 1.05,
-    "color": 1.2,
-    "grain_strength": 15,
-    "grain_effect": true,
-    "sun_traces_effect": true
-  },
-  "chatgpt_template": {
-    "warmth_factor": 1.08,
-    "warm_r": 1.08,
-    "warm_g": 0.97,
-    "glow_strength": 0.15,
-    "glow_blur": 8,
-    "brightness": 1.05,
-    "contrast": 1.12,
-    "vibrance": 1.1,
-    "color": 1.0,
-    "grain_strength": 0,
-    "sharpness": 1.3,
-    "sun_traces": 0,
-    "grain_effect": false,
-    "sun_traces_effect": false
+  "ladne 2": {
+    "params": {
+      "exposure": 0.0,
+      "brightness": 1.08,
+      "contrast": 0.92,
+      "highlights": 15.0,
+      "shadows": 0.0,
+      "whites": 0.0,
+      "blacks": 0.0,
+      "temperature": 25.0,
+      "tint": 5.0,
+      "saturation": 1.1,
+      "vibrance": 1.0,
+      "hue": 0.0,
+      "grain": 0.0,
+      "vignette": 10.0,
+      "glow": 30.0,
+      "fade": 10.0,
+      "clarity": 0.0,
+      "sharpen": 0.0,
+      "blur": 0.0,
+      "light_leak": 0.0,
+      "sun_flare": 0.0,
+      "noise_reduction": 0.0,
+      "posterize": 0.0,
+      "sepia": 0.0
+    },
+    "cover": "/preset-cover/ladne 2.jpg"
   }
 }
