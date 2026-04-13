@@ -199,11 +199,13 @@ def apply_grain(img, value):
     """Film grain overlay. value in [0, 100], 0 = no grain."""
     if value == 0:
         return img
-    strength = value * 0.5  # scale to reasonable noise level
     w, h = img.size
-    noise = Image.effect_noise((w, h), strength)
+    sigma = value * 0.4  # noise spread
+    noise = Image.effect_noise((w, h), sigma)
     noise_rgb = Image.merge('RGB', (noise, noise, noise))
-    return ImageChops.add(img, noise_rgb, scale=2.0)
+    # Noise is centered at 128; subtract 128 so it's centered at zero.
+    # This way pixels randomly brighten or darken — no gray wash.
+    return ImageChops.add(img, noise_rgb, scale=1, offset=-128)
 
 
 def apply_vignette(img, value):
@@ -376,6 +378,86 @@ def apply_sepia(img, value):
     return Image.blend(img, sepia, factor)
 
 
+def apply_ghosting(img, value):
+    """Double-exposure ghosting. Overlays a shifted, softened copy of the image.
+    value in [0, 100], 0 = no effect."""
+    if value == 0:
+        return img
+    w, h = img.size
+    strength = value / 100.0
+
+    # Offset scales with image size for consistent look across resolutions
+    offset_x = max(3, int(w * 0.02 * strength))
+    offset_y = max(2, int(h * 0.015 * strength))
+
+    # Create the ghost layer: shifted + softened
+    ghost = ImageChops.offset(img, offset_x, offset_y)
+    blur_radius = max(2, int(8 * strength))
+    ghost = ghost.filter(ImageFilter.GaussianBlur(radius=blur_radius))
+
+    # Lighten-blend: take the brighter pixel from original and ghost
+    lightened = ImageChops.lighter(img, ghost)
+
+    # Blend the lightened result back with the original
+    blend_alpha = min(0.7, strength * 0.7)
+    return Image.blend(img, lightened, blend_alpha)
+
+
+def apply_shape_blur(img, value, params):
+    """Regional shape blur. value = blur intensity [0, 50], 0 = no effect.
+    Uses shape_blur_* params for shape, mode, size, feather, and position."""
+    if value == 0:
+        return img
+
+    w, h = img.size
+    blur_radius = max(2, int(value * 0.6))
+
+    shape = int(float(params.get('shape_blur_shape', 0)))
+    invert = int(float(params.get('shape_blur_invert', 1)))
+    size_pct = float(params.get('shape_blur_size', 50)) / 100.0
+    feather = float(params.get('shape_blur_feather', 30)) / 100.0
+    pos_x = float(params.get('shape_blur_x', 50)) / 100.0
+    pos_y = float(params.get('shape_blur_y', 50)) / 100.0
+
+    cx = pos_x * w
+    cy = pos_y * h
+    base_size = min(w, h) * size_pct
+
+    # Create shape mask (white = shape area)
+    mask = Image.new('L', (w, h), 0)
+    draw = ImageDraw.Draw(mask)
+
+    if shape == 0:  # Circle
+        r = base_size / 2
+        draw.ellipse([cx - r, cy - r, cx + r, cy + r], fill=255)
+    elif shape == 1:  # Square
+        half = base_size / 2
+        draw.rectangle([cx - half, cy - half, cx + half, cy + half], fill=255)
+    elif shape == 2:  # Triangle
+        half = base_size / 2
+        draw.polygon([
+            (cx, cy - half),
+            (cx - half, cy + half),
+            (cx + half, cy + half),
+        ], fill=255)
+
+    # Feather edges
+    feather_radius = max(1, int(base_size * feather * 0.5))
+    mask = mask.filter(ImageFilter.GaussianBlur(radius=feather_radius))
+
+    # Create blurred version
+    blurred = img.filter(ImageFilter.GaussianBlur(radius=blur_radius))
+
+    if invert:
+        # Focus mode: shape stays sharp, outside blurred
+        result = Image.composite(img, blurred, mask)
+    else:
+        # Blur inside shape
+        result = Image.composite(blurred, img, mask)
+
+    return result
+
+
 # ─── Edit Pipeline ──────────────────────────────────────────────────────────
 
 # Processing order matters — this is a standard photo editing pipeline
@@ -405,6 +487,8 @@ EDIT_PIPELINE = [
     ('posterize', apply_posterize),
     ('sepia', apply_sepia),
     ('motion_blur', apply_motion_blur),
+    ('ghosting', apply_ghosting),
+    ('shape_blur', apply_shape_blur),
 ]
 
 
@@ -417,7 +501,11 @@ def edit_image(image, params):
             value = float(value)
         else:
             value = int(float(value))
-        image = func(image, value)
+        # shape_blur needs full params for its sub-settings
+        if param_name == 'shape_blur':
+            image = func(image, value, params)
+        else:
+            image = func(image, value)
     return image
 
 

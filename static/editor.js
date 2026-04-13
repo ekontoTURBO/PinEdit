@@ -38,6 +38,7 @@
         renderPresets();
         setupUpload();
         setupSliders();
+        setupShapeBlurControls();
         setupGroupToggles();
         setupButtons();
         setupSettings();
@@ -212,6 +213,11 @@
             const input = row.querySelector('input[type="range"]');
             params[row.dataset.param] = parseFloat(input.value);
         });
+        // Shape blur button-group values
+        const shapePicker = document.getElementById('shape-picker');
+        const modeToggle = document.getElementById('mode-toggle');
+        if (shapePicker) params.shape_blur_shape = parseInt(shapePicker.dataset.value);
+        if (modeToggle) params.shape_blur_invert = parseInt(modeToggle.dataset.value);
         return params;
     }
 
@@ -225,6 +231,13 @@
                 display.textContent = formatValue(params[key], row.dataset.step);
             }
         });
+        // Shape blur button-group values
+        if ('shape_blur_shape' in params) {
+            setShapePicker(parseInt(params.shape_blur_shape));
+        }
+        if ('shape_blur_invert' in params) {
+            setModeToggle(parseInt(params.shape_blur_invert));
+        }
     }
 
     function resetParams() {
@@ -233,6 +246,109 @@
             const display = row.querySelector('.slider-value');
             input.value = row.dataset.default;
             display.textContent = formatValue(row.dataset.default, row.dataset.step);
+        });
+        setShapePicker(0);
+        setModeToggle(1);
+    }
+
+    // ─── Shape Blur Controls ─────────────────────────────────────────────
+
+    function setupShapeBlurControls() {
+        // Shape picker buttons
+        const shapePicker = document.getElementById('shape-picker');
+        if (shapePicker) {
+            shapePicker.querySelectorAll('.shape-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    setShapePicker(parseInt(btn.dataset.shape));
+                    schedulePreview();
+                });
+            });
+        }
+
+        // Mode toggle buttons
+        const modeToggle = document.getElementById('mode-toggle');
+        if (modeToggle) {
+            modeToggle.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    setModeToggle(parseInt(btn.dataset.mode));
+                    schedulePreview();
+                });
+            });
+        }
+
+        // Drag on preview to position shape blur
+        setupShapeDrag();
+    }
+
+    function setupShapeDrag() {
+        let dragging = false;
+
+        function isShapeBlurActive() {
+            const row = document.querySelector('.slider-row[data-param="shape_blur"]');
+            if (!row) return false;
+            return parseFloat(row.querySelector('input[type="range"]').value) > 0;
+        }
+
+        function updatePositionFromEvent(e) {
+            const rect = previewImage.getBoundingClientRect();
+            const x = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+            const y = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
+
+            // Update sliders
+            const xRow = document.querySelector('.slider-row[data-param="shape_blur_x"]');
+            const yRow = document.querySelector('.slider-row[data-param="shape_blur_y"]');
+            if (xRow) {
+                const input = xRow.querySelector('input[type="range"]');
+                const display = xRow.querySelector('.slider-value');
+                input.value = Math.round(x);
+                display.textContent = Math.round(x);
+            }
+            if (yRow) {
+                const input = yRow.querySelector('input[type="range"]');
+                const display = yRow.querySelector('.slider-value');
+                input.value = Math.round(y);
+                display.textContent = Math.round(y);
+            }
+            schedulePreview();
+        }
+
+        previewImage.addEventListener('mousedown', (e) => {
+            if (!isShapeBlurActive()) return;
+            e.preventDefault();
+            dragging = true;
+            previewImage.style.cursor = 'crosshair';
+            updatePositionFromEvent(e);
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!dragging) return;
+            e.preventDefault();
+            updatePositionFromEvent(e);
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (dragging) {
+                dragging = false;
+                previewImage.style.cursor = '';
+            }
+        });
+    }
+
+    function setShapePicker(value) {
+        const picker = document.getElementById('shape-picker');
+        if (!picker) return;
+        picker.dataset.value = value;
+        picker.querySelectorAll('.shape-btn').forEach(btn => {
+            btn.classList.toggle('active', parseInt(btn.dataset.shape) === value);
+        });
+    }
+
+    function setModeToggle(value) {
+        const toggle = document.getElementById('mode-toggle');
+        if (!toggle) return;
+        toggle.dataset.value = value;
+        toggle.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.classList.toggle('active', parseInt(btn.dataset.mode) === value);
         });
     }
 
