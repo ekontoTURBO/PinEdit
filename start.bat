@@ -45,3 +45,7 @@ start "" http://localhost:5000
 
 :: Run Flask
 python app.py
+
+echo.
+echo [ERROR] The app stopped or crashed. See message above.
+pause
