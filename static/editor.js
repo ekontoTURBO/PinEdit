@@ -722,6 +722,9 @@
         });
     }
 
+    // ─── Heartbeat (auto-shutdown when browser closes) ─────────────────
+    setInterval(() => fetch('/heartbeat', { method: 'POST' }), 2000);
+
     // ─── Start ──────────────────────────────────────────────────────────
     init();
 })();

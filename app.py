@@ -8,8 +8,25 @@ import base64
 import json
 import random
 import math
+import threading
+import time
 
 app = Flask(__name__)
+
+# ─── Auto-shutdown when browser closes ────────────────────────────────────────
+_last_heartbeat = time.time()
+_HEARTBEAT_TIMEOUT = 5  # seconds without heartbeat before shutdown
+
+
+def _heartbeat_watcher():
+    """Background thread that shuts down the server if no heartbeat is received."""
+    # Give the browser time to connect on startup
+    time.sleep(_HEARTBEAT_TIMEOUT + 3)
+    while True:
+        time.sleep(2)
+        if time.time() - _last_heartbeat > _HEARTBEAT_TIMEOUT:
+            print('\n  Browser disconnected — shutting down Pinedit.')
+            os._exit(0)
 UPLOAD_FOLDER = 'uploads'
 PRESET_COVERS_FOLDER = 'preset_covers'
 SETTINGS_FILE = 'settings.json'
@@ -740,5 +757,14 @@ def browse_folder():
     return jsonify({'path': ''})
 
 
+@app.route('/heartbeat', methods=['POST'])
+def heartbeat():
+    global _last_heartbeat
+    _last_heartbeat = time.time()
+    return '', 204
+
+
 if __name__ == '__main__':
+    watcher = threading.Thread(target=_heartbeat_watcher, daemon=True)
+    watcher.start()
     app.run(debug=False, port=5000)
